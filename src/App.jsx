@@ -29,12 +29,12 @@ function App() {
   useEffect(() => {
     if (isSecretKeyValid) {
       axios
-        .get('http://localhost:5000/funds')
+        .get(`${baseUrl}/funds`)
         .then(response => setFunds(response.data))
         .catch(() => toast.error('Error fetching funds'));
 
       axios
-        .get('http://localhost:5000/expenses')
+        .get(`${baseUrl}/expenses`)
         .then(response => setExpenses(response.data))
         .catch(() => toast.error('Error fetching expenses'));
     }
