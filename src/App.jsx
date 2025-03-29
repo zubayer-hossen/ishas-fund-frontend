@@ -19,7 +19,7 @@ function App() {
   const [expenses, setExpenses] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [searchAmount, setSearchAmount] = useState('');
-  const [searchExpense, setSearchExpense] = useState(''); // State for expense search
+  const [searchExpense, setSearchExpense] = useState('');
   const [isSecretKeyValid, setIsSecretKeyValid] = useState(false);
 
   useEffect(() => {
@@ -85,7 +85,6 @@ function App() {
     (searchAmount === '' || f.amount.toString().includes(searchAmount))
   );
 
-  // Filtering expenses based on search text (description or amount)
   const filteredExpenses = expenses.filter(e => 
     e.description.toLowerCase().includes(searchExpense.toLowerCase()) || 
     e.amount.toString().includes(searchExpense)
@@ -206,11 +205,17 @@ function App() {
 
           <Divider orientation="center">Fund Records</Divider>
           <div className="table-container">
+            <Card style={{ marginBottom: '20px' }}>
+              <h3>Filtered Fund Records: {filteredFunds.length} {filteredFunds.length === 1 ? 'record' : 'records'}</h3>
+            </Card>
             <Table columns={fundColumns} dataSource={filteredFunds} rowKey="transactionId" pagination={{ pageSize: 5 }} scroll={{ x: 'max-content' }} />
           </div>
 
           <Divider orientation="center">Expense Records</Divider>
           <div className="table-container">
+            <Card style={{ marginBottom: '20px' }}>
+              <h3>Filtered Expense Records: {filteredExpenses.length} {filteredExpenses.length === 1 ? 'record' : 'records'}</h3>
+            </Card>
             <Table columns={expenseColumns} dataSource={filteredExpenses} rowKey="transactionId" pagination={{ pageSize: 5 }} scroll={{ x: 'max-content' }} />
           </div>
 
