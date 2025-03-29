@@ -18,6 +18,8 @@ function App() {
   const [funds, setFunds] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [searchText, setSearchText] = useState('');
+  const [searchAmount, setSearchAmount] = useState('');
+  const [searchExpense, setSearchExpense] = useState(''); // State for expense search
   const [isSecretKeyValid, setIsSecretKeyValid] = useState(false);
 
   useEffect(() => {
@@ -77,7 +79,18 @@ function App() {
     }
   };
 
-  const filteredFunds = funds.filter(f => f.name.toLowerCase().includes(searchText.toLowerCase()) || f.transactionId.toLowerCase().includes(searchText.toLowerCase()));
+  const filteredFunds = funds.filter(f => 
+    (f.name.toLowerCase().includes(searchText.toLowerCase()) || 
+    f.transactionId.toLowerCase().includes(searchText.toLowerCase())) &&
+    (searchAmount === '' || f.amount.toString().includes(searchAmount))
+  );
+
+  // Filtering expenses based on search text (description or amount)
+  const filteredExpenses = expenses.filter(e => 
+    e.description.toLowerCase().includes(searchExpense.toLowerCase()) || 
+    e.amount.toString().includes(searchExpense)
+  );
+
   const formatDate = date => new Date(date).toLocaleString('en-GB', {
     day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
   });
@@ -174,6 +187,22 @@ function App() {
             enterButton
             style={{ marginBottom: '20px' }}
           />
+          <Input.Search
+            placeholder="Search by Amount"
+            value={searchAmount}
+            onChange={e => setSearchAmount(e.target.value)}
+            enterButton
+            style={{ marginBottom: '20px' }}
+          />
+
+          <Divider orientation="center">Search Expense</Divider>
+          <Input.Search
+            placeholder="Search by Description or Amount"
+            value={searchExpense}
+            onChange={e => setSearchExpense(e.target.value)}
+            enterButton
+            style={{ marginBottom: '20px' }}
+          />
 
           <Divider orientation="center">Fund Records</Divider>
           <div className="table-container">
@@ -182,7 +211,7 @@ function App() {
 
           <Divider orientation="center">Expense Records</Divider>
           <div className="table-container">
-            <Table columns={expenseColumns} dataSource={expenses} rowKey="transactionId" pagination={{ pageSize: 5 }} scroll={{ x: 'max-content' }} />
+            <Table columns={expenseColumns} dataSource={filteredExpenses} rowKey="transactionId" pagination={{ pageSize: 5 }} scroll={{ x: 'max-content' }} />
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '30px' }}>
